@@ -1,12 +1,23 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/25 15:10
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+
+/*
  *
- * OpenGenisys Project
- */
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *
+*/
 
 namespace pocketmine;
 
@@ -45,6 +56,7 @@ use pocketmine\inventory\Recipe;
 use pocketmine\inventory\ShapedRecipe;
 use pocketmine\inventory\ShapelessRecipe;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\item\enchantment\EnchantmentLevelTable;
 use pocketmine\item\Item;
 use pocketmine\lang\BaseLang;
 use pocketmine\level\format\anvil\Anvil;
@@ -97,6 +109,7 @@ use pocketmine\tile\Chest;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
+use pocketmine\tile\ItemFrame;
 use pocketmine\tile\MobSpawner;
 use pocketmine\tile\Sign;
 use pocketmine\tile\Skull;
@@ -348,6 +361,7 @@ class Server{
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
 	public $readRecipesFromJson = false;
+	public $minecartMovingType = 0;
 
 	/** @var CraftingDataPacket */
 	private $recipeList = null;
@@ -1622,6 +1636,7 @@ class Server{
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
 		$this->readRecipesFromJson = $this->getAdvancedProperty("server.read-recipes-from-json", false);
+		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 	}
 
 	/**
@@ -1707,7 +1722,7 @@ class Server{
 		   §5PocketMine-iTX §3Genisys §fis a fork of PocketMine-MP.
 		   Powered by §5iTX Technologies LLC.
 		   §fVersion: §6" . $this->getPocketMineVersion() . "
-		   §fClient Version: §d0.13.1 alpha
+		   §fClient Version: §d". \pocketmine\MINECRAFT_VERSION ."
 		   §fYou could get the lastest code on https://github.com/iTXTech/Genisys
 		   §fDonate link: http://pl.zxda.net/plugins/203.html
 		   §f如果你在免费使用本核心，希望你可以进入上面的链接捐赠给我们，这会成为我们前进的动力。
@@ -1879,7 +1894,7 @@ class Server{
 			Effect::init();
 			Enchantment::init();
 			Attribute::init();
-			/** TODO: @deprecated */
+			EnchantmentLevelTable::init();
 			//TextWrapper::init();
 			$this->craftingManager = new CraftingManager($this->readRecipesFromJson);
 
@@ -2185,11 +2200,8 @@ private function lookupAddress($address) {
 		foreach($players as $p){
 			if($p->isConnected()){
 				$targets[] = $this->identifiers[spl_object_hash($p)];
-				//$targets[] = $p->getName();
 			}
 		}
-
-		//$this->broadcastPacketsCallback(zlib_encode($str, ZLIB_ENCODING_DEFLATE, $this->networkCompressionLevel), $targets);//临时修复
 
 		if(!$forceSync and $this->networkCompressionAsync){
 			$task = new CompressBatchedTask($str, $targets, $this->networkCompressionLevel);
@@ -3016,5 +3028,6 @@ private function lookupAddress($address) {
 		Tile::registerTile(FlowerPot::class);
 		Tile::registerTile(Skull::class);
 		Tile::registerTile(MobSpawner::class);
+		Tile::registerTile(ItemFrame::class);
 	}
 }

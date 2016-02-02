@@ -56,9 +56,11 @@ class Effect{
 	const ABSORPTION = 22;
 	const SATURATION = 23;
 
+	const MAX_DURATION = 2147483648;
+
 	/** @var Effect[] */
 	protected static $effects;
-	
+
 	public static function init(){
 		self::$effects = new \SplFixedArray(256);
 
@@ -76,16 +78,16 @@ class Effect{
 		self::$effects[Effect::FIRE_RESISTANCE] = new Effect(Effect::FIRE_RESISTANCE, "%potion.fireResistance", 228, 154, 58);
 		self::$effects[Effect::WATER_BREATHING] = new Effect(Effect::WATER_BREATHING, "%potion.waterBreathing", 46, 82, 153);
 		self::$effects[Effect::INVISIBILITY] = new Effect(Effect::INVISIBILITY, "%potion.invisibility", 127, 131, 146);
-		
+
 		self::$effects[Effect::BLINDNESS] = new Effect(Effect::BLINDNESS, "%potion.blindness", 191, 192, 192);
 		self::$effects[Effect::NIGHT_VISION] = new Effect(Effect::NIGHT_VISION, "%potion.nightVision", 0, 0, 139);
 		self::$effects[Effect::HUNGER] = new Effect(Effect::HUNGER, "%potion.hunger", 46, 139, 87);
-		
+
 		self::$effects[Effect::WEAKNESS] = new Effect(Effect::WEAKNESS, "%potion.weakness", 72, 77, 72 , true);
 		self::$effects[Effect::POISON] = new Effect(Effect::POISON, "%potion.poison", 78, 147, 49, true);
 		self::$effects[Effect::WITHER] = new Effect(Effect::WITHER, "%potion.wither", 53, 42, 39, true);
 		self::$effects[Effect::HEALTH_BOOST] = new Effect(Effect::HEALTH_BOOST, "%potion.healthBoost", 248, 125, 35);
-		
+
 		self::$effects[Effect::ABSORPTION] = new Effect(Effect::ABSORPTION, "%potion.absorption", 36, 107, 251);
 		self::$effects[Effect::SATURATION] = new Effect(Effect::SATURATION, "%potion.saturation", 255, 0, 255);
 	}
@@ -115,7 +117,7 @@ class Effect{
 
 	protected $duration;
 
-	protected $amplifier;
+	protected $amplifier = 0;
 
 	protected $color;
 
@@ -141,7 +143,7 @@ class Effect{
 	}
 
 	public function setDuration($ticks){
-		$this->duration = $ticks;
+		$this->duration = (($ticks > self::MAX_DURATION) ? self::MAX_DURATION : $ticks);
 		return $this;
 	}
 
@@ -189,6 +191,7 @@ class Effect{
 	}
 
 	public function canTick(){
+		if($this->amplifier < 0) $this->amplifier = 0;
 		switch($this->id){
 			case Effect::POISON:
 				if(($interval = (25 >> $this->amplifier)) > 0){
@@ -307,11 +310,11 @@ class Effect{
 			}
 
 			$entity->dataPacket($pk);
-			
+
 			if($this->id === Effect::SPEED){
 				if($entity instanceof Player) $entity->setMovementSpeed(0.1 + ($this->amplifier + 1) * 0.01);
 			}
-			
+
 			if($this->id === Effect::SLOWNESS){
 				if($entity instanceof Player) $entity->setMovementSpeed(0.1 - ($this->amplifier + 1) * 0.01);
 			}
@@ -331,7 +334,7 @@ class Effect{
 			$pk->effectId = $this->getId();
 
 			$entity->dataPacket($pk);
-			
+
 			if($this->id === Effect::SPEED or $this->id === Effect::SLOWNESS){
 				if($entity instanceof Player) $entity->setMovementSpeed(0.1);
 			}

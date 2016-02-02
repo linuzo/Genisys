@@ -1,12 +1,23 @@
 <?php
-/**
- * Author: PeratX
- * Time: 2015/12/25 15:10
- * Copyright(C) 2011-2015 iTX Technologies LLC.
- * All rights reserved.
+
+/*
  *
- * OpenGenisys Project
- */
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
+ *
+ *
+*/
 
 namespace pocketmine;
 
@@ -68,6 +79,7 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\inventory\BaseTransaction;
 use pocketmine\inventory\BigShapedRecipe;
 use pocketmine\inventory\BigShapelessRecipe;
+use pocketmine\inventory\EnchantInventory;
 use pocketmine\inventory\FurnaceInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
@@ -199,7 +211,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	protected $teleportPosition = null;
 	protected $connected = true;
 	protected $ip;
-	protected $removeFormat = true;
+	protected $removeFormat = false;
 	protected $port;
 	protected $username;
 	protected $iusername;
@@ -279,6 +291,16 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 	protected $explevel = 0;
 	protected $experience = 0;
+
+	public function setExperienceAndLevel($exp, $level){
+		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, $level));
+		if($ev->isCancelled()) return false;
+		$this->explevel = $level;
+		$this->experience = $exp;
+		$this->calcExpLevel();
+		$this->updateExperience();
+		return true;
+	}
 
 	public function setExperience($exp){
 		$this->server->getPluginManager()->callEvent($ev = new PlayerExperienceChangeEvent($this, $exp, 0));
@@ -2234,9 +2256,9 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 			round($this->y, 4),
 			round($this->z, 4)
 		]));
-		if($this->isOp()){
+		/*if($this->isOp()){
 			$this->setRemoveFormat(false);
-		}
+		}*/
 		if($this->gamemode === Player::SPECTATOR){
 			$pk = new ContainerSetContentPacket();
 			$pk->windowid = ContainerSetContentPacket::SPECIAL_CREATIVE;
@@ -2375,11 +2397,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					if($entity instanceof Boat){
 						$entity->setPosition($this->temporalVector->setComponents($packet->x, $packet->y - 0.3, $packet->z));
 					}
-					if($entity instanceof Minecart){
+					/*if($entity instanceof Minecart){
 						$entity->isFreeMoving = true;
 						$entity->motionX = -sin($packet->yaw / 180 * M_PI);
 						$entity->motionZ = cos($packet->yaw / 180 * M_PI);
-					}
+					}*/
 				}
 
 				$newPos = new Vector3($packet->x, $packet->y - $this->getEyeHeight(), $packet->z);
@@ -3441,6 +3463,11 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				}elseif(isset($this->windowIndex[$packet->windowid])){
 					$this->craftingType = 0;
 					$inv = $this->windowIndex[$packet->windowid];
+
+					if($inv instanceof EnchantInventory and $packet->item->hasEnchantments()) {
+						$inv->onEnchant($this, $inv->getItem($packet->slot), $packet->item);
+                    }
+
 					$transaction = new BaseTransaction($inv, $packet->slot, $inv->getItem($packet->slot), $packet->item);
 				}else{
 					break;
