@@ -1,6 +1,6 @@
 [
 ![Genisys - PocketMine-iTX Core]
-(http://i13.tietuku.com/a09f334357d8a224.jpg)
+(http://i13.tietuku.com/aa044daf6ecb66a4.jpg)
 ]
 (#)
 
@@ -16,8 +16,8 @@
 ###Genisys
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](http://mcper.cn:8080/job/Genisys/lastBuild/badge/icon)](http://mcper.cn:8080/job/Genisys/lastBuild/)
-[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=php7-0.14)](https://travis-ci.org/iTXTech/Genisys)
+[![Build Status](http://jenkins.mcper.cn/job/Genisys-master/lastBuild/badge/icon)](http://jenkins.mcper.cn/job/Genisys-master/lastBuild)
+[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 * One Core to rule them ALL
 * This core is an unofficial version of PocketMine-MP modified by DREAM STUDIO & iTX Technologies LLC.
 * Genisys is only a fork of PocketMine-MP and all original codes are written by PocketMine Team.
@@ -25,6 +25,7 @@
 * Be free to create a _Pull Request_ or open an _Issue_. English and Chinese are both recommended. (Please do your best to use English because it is easy to communicate with worldwide.)
 
 ###Acknowledgements
+* Some features are merged from **@boybook**'s **FCCore**
 * Skull, FlowerPot are based on **@ImagicalCorp** ImagicalMine's work
 * AIs are based on **@Zzm317**'s amazing MyOwnWorld.
 * Painting and Brewing Stand are translated from **Nukkit** Project
@@ -36,16 +37,13 @@
 * **@FENGberd**'s encouragement
 * Our leaders are **@ishitatsuyuki** and **@jasonczc**
 
-###Jenkins CI
-Jenkins Server is moving and Jenkins server won't be available.<br>
-[**Click Here to go to Jenkins CI Page**](http://mcper.cn:8080/job/Genisys/)
+###Auto Build (CI) Pages
+[**Jenkins**](http://jenkins.mcper.cn/job/Genisys-master/)
+<br>
+[**Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
-Temporary webdisk download:<br>
-China Baidu: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628 <br>
-Worldwide Google: https://drive.google.com/file/d/0B47xKpOkRL7JaU9ZNE9CRDVXTTA/view?usp=sharing
-
-###Documentation
-[**Click Here to go to Genisys Documentation Page**](http://mcper.cn/Genisys-Docs/)
+###Official Development Documentation
+[**Click Here to go to Genisys Official Development Documentation Page**](http://mcper.cn/Genisys-Docs/)
 
 ###Features
 * Performance optimization (Let 100+ players join in a server)
@@ -123,8 +121,8 @@ Port: **888**
 ###创世纪
 
 [![Join the chat at https://gitter.im/iTXTech/Genisys](https://badges.gitter.im/iTXTech/Genisys.svg)](https://gitter.im/iTXTech/Genisys?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](http://mcper.cn:8080/job/Genisys/lastBuild/badge/icon)](http://mcper.cn:8080/job/Genisys/lastBuild/)
-[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=php7-0.14)](https://travis-ci.org/iTXTech/Genisys)
+[![Build Status](http://jenkins.mcper.cn/job/Genisys-master/lastBuild/badge/icon)](http://jenkins.mcper.cn/job/Genisys-master/lastBuild)
+[![Build Status](https://travis-ci.org/iTXTech/Genisys.svg?branch=master)](https://travis-ci.org/iTXTech/Genisys)
 * 一个核心统治一切。
 * 此内核为 PocketMine-MP 的非官方版，由 轻梦工作室 与 iTX Tech 联合优化。
 * 创世纪 仅为 PocketMine-MP 项目的分支，PocketMine-MP 所有原始代码均由 PocketMine 小组编写。
@@ -143,13 +141,10 @@ Port: **888**
 * 感谢 **@FENGberd** 的支持与鼓励；
 * 我们的项目负责人为 **@ishitatsuyuki** 及 **@jasonczc**。
 
-###自动构建的核心
-Genisys 的 Jenkins 服务器正在转移到一个更好的机房。因此在若干天内，该服务将不可用。<br>
-[**点击这里进入下载**](http://mcper.cn:8080/job/Genisys/)
-
-临时网盘下载：<br>
-中国 百度云: http://pan.baidu.com/share/link?shareid=641012570&uk=2065873628 <br>
-全球 Google: https://drive.google.com/file/d/0B47xKpOkRL7JaU9ZNE9CRDVXTTA/view?usp=sharing
+###自动构建的核心 - CI
+[**点击这里进入官方 Jenkins CI**](http://jenkins.mcper.cn/job/Genisys-master)
+<br>
+[**点击这里进入官方 Travis-CI**](https://travis-ci.org/iTXTech/Genisys)
 
 ###开发文档
 [**点击这里进入文档首页**](http://mcper.cn/Genisys-Docs/)

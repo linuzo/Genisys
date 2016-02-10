@@ -106,6 +106,9 @@ use pocketmine\scheduler\SendUsageTask;
 use pocketmine\scheduler\ServerScheduler;
 use pocketmine\tile\BrewingStand;
 use pocketmine\tile\Chest;
+use pocketmine\tile\Dispenser;
+use pocketmine\tile\DLDetector;
+use pocketmine\tile\Dropper;
 use pocketmine\tile\EnchantTable;
 use pocketmine\tile\FlowerPot;
 use pocketmine\tile\Furnace;
@@ -352,7 +355,7 @@ class Server{
 	public $dserverPlayers = 0;
 	public $dserverAllPlayers = 0;
 	public $redstoneEnabled = false;
-	public $allowFakeLowFrequencyPulse = false;
+	public $allowFrequencyPulse = false;
 	public $anviletEnabled = false;
 	public $pulseFrequency = 20;
 	public $playerMsgType = self::PLAYER_MSG_TYPE_MESSAGE;
@@ -360,7 +363,8 @@ class Server{
 	public $playerLogoutMsg = "";
 	public $antiFly = false;
 	public $asyncChunkRequest = true;
-	public $readRecipesFromJson = false;
+	public $recipesFromJson = false;
+	public $creativeItemsFromJson = false;
 	public $minecartMovingType = 0;
 
 	/** @var CraftingDataPacket */
@@ -850,7 +854,7 @@ class Server{
 	/**
 	 * @param string $name
 	 *
-	 * @return Compound
+	 * @return CompoundTag
 	 */
 	public function getOfflinePlayerData($name){
 		$name = strtolower($name);
@@ -1629,13 +1633,14 @@ class Server{
 			"serverList" => explode(";", $this->getAdvancedProperty("dserver.server-list", ""))
 		];
 		$this->redstoneEnabled = $this->getAdvancedProperty("redstone.enable", false);
-		$this->allowFakeLowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-fake-low-frequency-pulse", false);
+		$this->allowFrequencyPulse = $this->getAdvancedProperty("redstone.allow-frequency-pulse", false);
 		$this->pulseFrequency = $this->getAdvancedProperty("redstone.pulse-frequency", 20);
 		$this->anviletEnabled = $this->getAdvancedProperty("server.allow-anvilandenchanttable", false);
 		$this->getLogger()->setWrite(!$this->getAdvancedProperty("server.disable-log", false));
 		$this->antiFly = $this->getAdvancedProperty("server.anti-fly", true);
 		$this->asyncChunkRequest = $this->getAdvancedProperty("server.async-chunk-request", true);
-		$this->readRecipesFromJson = $this->getAdvancedProperty("server.read-recipes-from-json", false);
+		$this->recipesFromJson = $this->getAdvancedProperty("server.recipes-from-json", false);
+		$this->creativeItemsFromJson = $this->getAdvancedProperty("server.creative-items-from-json", false);
 		$this->minecartMovingType = $this->getAdvancedProperty("server.minecart-moving-type", 0);
 	}
 
@@ -1889,14 +1894,14 @@ class Server{
 
 			InventoryType::init(min(32, $this->inventoryNum)); //Bigger than 32 with cause problems
 			Block::init();
-			Item::init();
+			Item::init($this->creativeItemsFromJson);
 			Biome::init();
 			Effect::init();
 			Enchantment::init();
 			Attribute::init();
 			EnchantmentLevelTable::init();
 			//TextWrapper::init();
-			$this->craftingManager = new CraftingManager($this->readRecipesFromJson);
+			$this->craftingManager = new CraftingManager($this->recipesFromJson);
 
 			$this->pluginManager = new PluginManager($this, $this->commandMap);
 			$this->pluginManager->subscribeToPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE, $this->consoleSender);
@@ -1915,7 +1920,7 @@ class Server{
 
 			$this->pluginManager->loadPlugins($this->pluginPath);
 
-			//$this->updater = new AutoUpdater($this, $this->getProperty("auto-updater.host", "www.pocketmine.net"));
+			$this->updater = new AutoUpdater($this, $this->getProperty("auto-updater.host", "www.pocketmine.net"));
 
 			$this->enablePlugins(PluginLoadOrder::STARTUP);
 
@@ -3029,5 +3034,8 @@ private function lookupAddress($address) {
 		Tile::registerTile(Skull::class);
 		Tile::registerTile(MobSpawner::class);
 		Tile::registerTile(ItemFrame::class);
+		Tile::registerTile(Dispenser::class);
+		Tile::registerTile(Dropper::class);
+		Tile::registerTile(DLDetector::class);
 	}
 }
