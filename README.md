@@ -1,11 +1,6 @@
-[KidzZone Edition of Genisys - Fork of We do not take credit!! We only modified the source. 
-![Genisys - PocketMine-iTX Core]
-(http://i13.tietuku.com/aa044daf6ecb66a4.jpg)
-]
-(#)
+[KidzZone Edition of Genisys - Fork of We do not take credit!! We only modified the source.
 
-#Genisys - iTX Core Offical GitHub Repository
-#Genisys - 创世纪 iTX 核心 官方 GitHub
+KidzZone Edition - Genisys - iTX Core Offical GitHub Repository
 
 <br>
 
