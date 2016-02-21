@@ -1,10 +1,8 @@
 [KidzZone Edition of Genisys - Fork of We do not take credit!! We only modified the source.
 
-KidzZone Edition - Genisys - iTX Core Offical GitHub Repository
-
 <br>
 
-#使用前必读 - Read before using
+#KidZone Editon - Read before using
 
 ##English Version
 
