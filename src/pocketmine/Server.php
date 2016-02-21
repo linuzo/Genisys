@@ -208,7 +208,7 @@ class Server{
 	/** @var PluginManager */
 	private $pluginManager = null;
 
-	private $profilingTickRate = 20;
+	private $profilingTickRate = 50;
 
 	/** @var AutoUpdater */
 	private $updater = null;
@@ -223,9 +223,9 @@ class Server{
 	 */
 	private $tickCounter;
 	private $nextTick = 0;
-	private $tickAverage = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
+	private $tickAverage = [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50];
 	private $useAverage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-	private $maxTick = 20;
+	private $maxTick = 50;
 	private $maxUse = 0;
 
 	private $sendUsageTicker = 0;
@@ -273,10 +273,10 @@ class Server{
 	private $network;
 
 	private $networkCompressionAsync = true;
-	public $networkCompressionLevel = 7;
+	public $networkCompressionLevel = 2;
 
 	private $autoTickRate = true;
-	private $autoTickRateLimit = 20;
+	private $autoTickRateLimit = 50;
 	private $alwaysTickPlayers = false;
 	private $baseTickRate = 1;
 
@@ -347,7 +347,7 @@ class Server{
 	public $aiEnabled = false;
 	public $aiHolder = null;
 	public $inventoryNum = 36;
-	public $hungerTimer = 80;
+	public $hungerTimer = 100;
 	public $weatherLastTime = 1200;
 	public $version;
 	public $allowSnowGolem;
@@ -2920,7 +2920,7 @@ private function lookupAddress($address) {
 
 		if(($this->tickCounter & 0b1111) === 0){
 			$this->titleTick();
-			$this->maxTick = 20;
+			$this->maxTick = 50;
 			$this->maxUse = 0;
 
 			if(($this->tickCounter & 0b111111111) === 0){
@@ -2963,8 +2963,8 @@ private function lookupAddress($address) {
 		Timings::$serverTickTimer->stopTiming();
 
 		$now = microtime(true);
-		$tick = min(20, 1 / max(0.001, $now - $tickTime));
-		$use = min(1, ($now - $tickTime) / 0.05);
+		$tick = min(50, 1 / max(0.001, $now - $tickTime));
+		$use = min(1, ($now - $tickTime) / 0.02);
 
 		//TimingsHandler::tick($tick <= $this->profilingTickRate);
 
@@ -2984,7 +2984,7 @@ private function lookupAddress($address) {
 		if(($this->nextTick - $tickTime) < -1){
 			$this->nextTick = $tickTime;
 		}else{
-			$this->nextTick += 0.05;
+			$this->nextTick += 0.02;
 		}
 
 		return true;

@@ -215,7 +215,7 @@ class ServerScheduler{
 			$period = 1;
 		}
 
-		return $this->handle(new TaskHandler(get_class($task), $task, $this->nextId(), $delay, $period));
+		return $this->handle(new TaskHandler(get_class($task), $task, $this->nextId(), $delay * 2.5, $period * 2.5));
 	}
 
 	private function handle(TaskHandler $handler){
